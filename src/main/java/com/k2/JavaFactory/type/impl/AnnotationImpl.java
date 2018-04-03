@@ -14,12 +14,18 @@ import com.k2.Util.classes.Dependency;
 
 public class AnnotationImpl extends TypeImpl implements IAnnotation {
 	
-	public AnnotationImpl(String name) { super(name); }
+	public AnnotationImpl(String name) { 
+		super(name); 
+	}
 
+	private boolean inline = false;
+	@Override
+	public boolean getInline() { return inline; }
+	public AnnotationImpl inline() { inline=true; return this; }
 
 	@Override
-	public AnnotationImpl addDependency(Dependency dependency) {
-		return (AnnotationImpl) super.addDependency(dependency);
+	public AnnotationImpl add(Dependency dependency) {
+		return (AnnotationImpl) super.add(dependency);
 	}
 
 
@@ -43,24 +49,26 @@ public class AnnotationImpl extends TypeImpl implements IAnnotation {
 	}
 
 
-	private Map<String,IParameter> parameters;
+	@Override
+	public boolean getHasParameters() { return parameters.size() > 0; }
+	
+	@Override 
+	public int getParameterCount() { return parameters.size(); }
+	
+	private final Map<String,IParameter> parameters = new HashMap<String, IParameter>();
 	@Override
 	public IParameter getParameter(String name) {
-		if (parameters == null)
-			return null;
 		return parameters.get(name);
 	}
 	public AnnotationImpl add(IParameter parameter) {
-		if (parameters == null)
-			parameters = new HashMap<String, IParameter>();
 		parameters.put(parameter.getName(), parameter);
 		return this;
 	}
-	public AnnotationImpl define(IType type, String name, boolean isVarArgs) {
+	public ParameterImpl define(IType type, String name, boolean isVarArgs) {
+		ParameterImpl parm = new ParameterImpl(this, type, name);
 		if (isVarArgs)
-			add(new ParameterImpl(this, type, name).varArgs());
-		else
-			add(new ParameterImpl(this, type, name));
-		return this;
+			parm.varArgs();
+		add(parm);
+		return parm;
 	}
 }

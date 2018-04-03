@@ -13,7 +13,6 @@ public class IInterface_<W extends Wiget> extends IType_<W> {
 
 	public WigetParameter<W, Set<IInterface>> extendsInterfaces;
 	public WigetParameter<W, Set<IMethodSignature>> methods;
-	public WigetParameter<W, Set<IAnnotation>> annotations;
 	
 
 }

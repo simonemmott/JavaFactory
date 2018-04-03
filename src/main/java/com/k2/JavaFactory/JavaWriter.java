@@ -27,9 +27,9 @@ public class JavaWriter {
 	
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-	private JavaFactory factory = new JavaFactory("com.k2.core.javaFactory.impl");
-	private File outputFolder;
-	private File archiveFolder;
+//	protected JavaFactory factory = new JavaFactory("com.k2.core.javaFactory.impl");
+	protected File outputFolder;
+	protected File archiveFolder;
 	/**
 	 * Create a template writer to write the template classes to the given output folder.
 	 * Template writers created in this way move current versions of the template classes to an archive folder created in the output folder.
@@ -77,33 +77,6 @@ public class JavaWriter {
 			throw new JavaWriterException("Unable to generate java source code - Unable to write to the {} location {}!", locationDescription, location.getAbsolutePath());
 		
 	}
-	
-	/**
-	 * This service method generates the java source code for the given template assemblies wiget specification and implementation classes in the output location defined when this template writer was instantiated
-	 * @param template	The template tofor which to generate and write the java source code
-	 * @throws JavaWriterException	If there is a problem writing the java source code to the output location or backing up the existing source for the template wiget to the archive location
-	 */
-/*	public void writeAppConfig(K2Application app) throws JavaWriterException {
-		
-		if (app == null)
-			throw new JavaWriterException("Unable to generate source code for the appllication configuration from a null application!");
-		
-		
-		String packageName = ClassUtil.getPackageNameFromCanonicalName(app.getConfigClassName());
-		Path packagePath = ClassUtil.packageNameToRelativePath(packageName);
-		
-		FileUtil.buildTree(outputFolder, packagePath);
-		
-		File javaResource = outputFolder.toPath().resolve(ClassUtil.packageNameToPath(app.getConfigClassName())+".java").toFile();
-
-		JavaAssembly<AppConfig, TemplateDef> java = factory.getAssembly(AppConfig.class);
-		try {
-			java.output(app, new PrintWriter(new FileWriter(javaResource))).flush();
-		} catch (IOException e) {
-			throw new JavaWriterException("Error writing application configuration for {} to {} - {}", e, app.getTitle(), javaResource.getAbsolutePath(), e.getMessage());
-		}
-					
-	}*/
 	
 	private void archiveResource(File resource, Path resourcePath) throws JavaWriterException {
 		if (resource.exists()) {

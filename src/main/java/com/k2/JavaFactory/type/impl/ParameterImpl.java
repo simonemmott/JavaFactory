@@ -7,15 +7,16 @@ import com.k2.JavaFactory.type.IAnnotation;
 import com.k2.JavaFactory.type.IClass;
 import com.k2.JavaFactory.type.IParameter;
 import com.k2.JavaFactory.type.IType;
+import com.k2.JavaFactory.type.wigetModel.ParameterContainer;
 import com.k2.Util.classes.ClassUtil;
 import com.k2.Util.classes.Dependencies;
 import com.k2.Util.classes.Dependency;
 
 public class ParameterImpl implements IParameter {
 	
-	private IType owner;
+	private ParameterContainer owner;
 	private String name;
-	public ParameterImpl(IType owner, IType type, String name) { 
+	public ParameterImpl(ParameterContainer owner, IType type, String name) { 
 		this.owner = owner;
 		this.type = type;
 		this.name = name; 
@@ -33,10 +34,31 @@ public class ParameterImpl implements IParameter {
 	public boolean getIsVarArgs() { return isVarArgs; }
 	public ParameterImpl varArgs() { isVarArgs = true; return this; }
 
+	private String title;
+	@Override
+	public String getTitle() { return title; }
+	public ParameterImpl setTitle(String title) {
+		this.title = title;
+		return this;
+	}
+	
+	private String description;
+	@Override
+	public String getDescription() { return description; }
+	public ParameterImpl setDescription(String description) {
+		this.description = description;
+		return this;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <O> O up(Class<O> ownerClass) {
+		return (O)owner;
+	}
+	
 	private Set<IAnnotation> annotations;
 	@Override
 	public Set<IAnnotation> getAnnotations() { return annotations; }
-	public ParameterImpl addAnnotation(IAnnotation annotation) {
+	public ParameterImpl annotate(IAnnotation annotation) {
 		if (annotations == null)
 			annotations = new TreeSet<IAnnotation>();
 		annotations.add(annotation);
@@ -73,6 +95,7 @@ public class ParameterImpl implements IParameter {
 			return false;
 		return true;
 	}
+
 
 	
 	

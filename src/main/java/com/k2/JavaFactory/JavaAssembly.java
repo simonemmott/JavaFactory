@@ -82,6 +82,8 @@ public class JavaAssembly<W extends Wiget,T> extends WigetAssembly<JavaFamily,Pr
 	 */
 	public String getIndent() { return currentIndent; }
 	
+	public String getIndent(boolean inline) { return (inline) ? "" : currentIndent; }
+	
 	private Dependencies dependencies;
 	public void dependenciesForName(String name) {
 		dependencies = Dependencies.forName(name);

@@ -6,5 +6,4 @@ public interface IInterface extends IType{
 
 	public Set<IInterface> getExtendsInterfaces();
 	public Set<IMethodSignature> getMethods();
-	public Set<IAnnotation> getAnnotations();
 }

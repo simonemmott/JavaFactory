@@ -8,5 +8,7 @@ public interface IParameter{
 	public String getName();
 	public boolean getIsVarArgs();
 	public Set<IAnnotation> getAnnotations();
+	public String getTitle();
+	public String getDescription();
 
 }

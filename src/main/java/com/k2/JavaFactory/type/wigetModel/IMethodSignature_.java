@@ -14,9 +14,15 @@ import com.k2.Wiget.WigetParameter;
 public class IMethodSignature_<W extends Wiget> {
 
 	public WigetParameter<W, Visibility> visibility;
-	public WigetParameter<W, IType> returnsType;
+	public WigetParameter<W, IType> returnType;
+	public WigetParameter<W, String> returnTypeDescription;
 	public WigetParameter<W, String> name;
+	public WigetParameter<W, String> title;
+	public WigetParameter<W, String> description;
+	public WigetParameter<W, Boolean> includeJavaDoc;
 	public WigetParameter<W, List<IParameter>> parameters;
+	public WigetParameter<W, Boolean> hasParameters;
+	public WigetParameter<W, Integer> parameterCount;
 	public WigetParameter<W, Set<IAnnotation>> annotations;
 
 }

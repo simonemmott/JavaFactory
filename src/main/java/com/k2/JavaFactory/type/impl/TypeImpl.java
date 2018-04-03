@@ -3,7 +3,9 @@ package com.k2.JavaFactory.type.impl;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.k2.JavaFactory.type.IAnnotation;
 import com.k2.JavaFactory.type.IType;
+import com.k2.Util.StringUtil;
 import com.k2.Util.classes.ClassUtil;
 import com.k2.Util.classes.Dependencies;
 import com.k2.Util.classes.Dependency;
@@ -22,6 +24,53 @@ public class TypeImpl implements IType {
 	@Override
 	public String getName() { return name; }
 
+	private String author;
+	@Override
+	public String getAuthor() { return author; }
+	public TypeImpl setAuthor(String author) {
+		this.author = author;
+		return this;
+	}
+	
+	private String title;
+	@Override
+	public String getTitle() { return title; }
+	public TypeImpl setTitle(String title) {
+		this.title = title;
+		return this;
+	}
+	
+	private String description;
+	@Override
+	public String getDescription() { return description; }
+	public TypeImpl setDescription(String description) {
+		this.description = description;
+		return this;
+	}
+	
+	private Boolean includeJavaDoc;
+	@Override
+	public boolean getIncludeJavaDoc() { return (includeJavaDoc==null) ? (StringUtil.isSet(title) || StringUtil.isSet(description) || StringUtil.isSet(author)) : includeJavaDoc; }
+	public TypeImpl setIncludeJavaDoc(Boolean includeJavaDoc) {
+		this.includeJavaDoc = includeJavaDoc;
+		return this;
+	}
+	
+	protected Set<IAnnotation> annotations;
+	@Override
+	public Set<IAnnotation> getAnnotations() { return annotations; }
+	public TypeImpl annotate(IAnnotation annotation) {
+		if (annotations == null)
+			annotations = new TreeSet<IAnnotation>();
+		annotations.add(annotation);
+		return this;
+	}
+
+	protected Object unwrap;
+	@Override
+	public Object getUnwrap() { return (unwrap==null) ? this : unwrap; }
+	public TypeImpl wrap(Object wrap) { this.unwrap = wrap; return this; }
+
 	Dependencies dependencies;
 	@Override
 	public Set<Dependency> getDependencies() { 
@@ -29,7 +78,7 @@ public class TypeImpl implements IType {
 			dependencies = Dependencies.forName(name);
 		return dependencies.getDependencies(); 
 	}
-	public IType addDependency(Dependency dependency) {
+	public IType add(Dependency dependency) {
 		if (dependencies == null)
 			dependencies = Dependencies.forName(name);
 		dependencies.add(dependency);

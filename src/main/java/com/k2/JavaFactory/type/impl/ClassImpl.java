@@ -5,14 +5,25 @@ import java.util.TreeSet;
 
 import com.k2.JavaFactory.type.IAnnotation;
 import com.k2.JavaFactory.type.IClass;
+import com.k2.JavaFactory.type.IField;
 import com.k2.JavaFactory.type.IInterface;
+import com.k2.JavaFactory.type.IType;
 import com.k2.JavaFactory.type.Visibility;
+import com.k2.Util.StringUtil;
 import com.k2.Util.classes.Dependency;
 
 public class ClassImpl extends TypeImpl implements IClass {
 	
 	public ClassImpl(String name) { super(name); }
 
+	@Override public ClassImpl setAuthor(String author) { super.setAuthor(author); return this; }
+	@Override public ClassImpl setTitle(String title) { super.setTitle(title); return this; }
+	@Override public ClassImpl setDescription(String description) { super.setDescription(description); return this; }
+	@Override public ClassImpl setIncludeJavaDoc(Boolean includeJavaDoc) { super.setIncludeJavaDoc(includeJavaDoc); return this; }
+	@Override public ClassImpl annotate(IAnnotation annotation) { super.annotate(annotation); return this; }
+	@Override public ClassImpl wrap(Object wrap) { super.wrap(wrap); return this; }
+	@Override public ClassImpl add(Dependency dependency) { super.add(dependency); return this; }
+	
 	private Visibility visibility;
 	@Override
 	public Visibility getVisibility() { return visibility; }
@@ -28,6 +39,9 @@ public class ClassImpl extends TypeImpl implements IClass {
 		this.extendsClass = extendsClass; 
 		return this; 
 	}
+	public ClassImpl extendsClass(String className) { 
+		return extendsClass(new ClassImpl(className)); 
+	}
 
 	private Set<IInterface> implementsInterfaces;
 	@Override
@@ -38,24 +52,22 @@ public class ClassImpl extends TypeImpl implements IClass {
 		implementsInterfaces.add(implementsInterface);
 		return this;
 	}
-
-	private Set<IAnnotation> annotations;
-	@Override
-	public Set<IAnnotation> getAnnotations() { return annotations; }
-	public ClassImpl addAnnotation(IAnnotation annotation) {
-		if (annotations == null)
-			annotations = new TreeSet<IAnnotation>();
-		annotations.add(annotation);
-		return this;
+	public ClassImpl implementsInterface(String interfaceName) {
+		return implementsInterface(new InterfaceImpl(interfaceName));
 	}
 
-	Object unwrap;
-	@Override
-	public Object getUnwrap() { return (unwrap==null) ? this : unwrap; }
-	public ClassImpl wrap(Object wrap) { this.unwrap = wrap; return this; }
-
-	@Override
-	public ClassImpl addDependency(Dependency dependency) {
-		return (ClassImpl) super.addDependency(dependency);
+	private final Set<IField> fields = new TreeSet<IField>();
+	public Set<IField> getFields() { return fields; }
+	public FieldImpl defineField(Visibility visibility, IType javaType, String name) {
+		FieldImpl field = new FieldImpl(this, visibility, javaType, name);
+		fields.add(field);
+		return field;
 	}
+	public FieldImpl defineField(IType javaType, String name) {
+		FieldImpl field = new FieldImpl(this, javaType, name);
+		fields.add(field);
+		return field;
+	}
+
+	
 }
