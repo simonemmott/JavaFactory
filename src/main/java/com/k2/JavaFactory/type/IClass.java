@@ -8,5 +8,6 @@ public interface IClass extends IType{
 	public IClass getExtendsClass();
 	public Set<IInterface> getImplementsInterfaces();
 	public Set<IField> getFields();
+	public Set<IMethod> getMethods();
 
 }

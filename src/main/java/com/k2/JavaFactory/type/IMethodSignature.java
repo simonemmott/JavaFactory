@@ -5,10 +5,6 @@ import java.util.Set;
 
 public interface IMethodSignature extends Comparable<IMethodSignature>{
 	
-	/**
-	 * 
-	 * @return
-	 */
 	public Visibility getVisibility();
 	public IType getReturnType();
 	public String getReturnTypeDescription();
@@ -20,10 +16,5 @@ public interface IMethodSignature extends Comparable<IMethodSignature>{
 	public Set<IAnnotation> getAnnotations();
 	public boolean getHasParameters();
 	public int getParameterCount();
-	/**
-	 * 
-	 * @param name
-	 * @return
-	 */
 	public IParameter getParameter(String name);
 }

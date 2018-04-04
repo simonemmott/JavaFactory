@@ -124,6 +124,9 @@ public class MethodSignatureImpl implements IMethodSignature, ParameterContainer
 		add(parm);
 		return parm;
 	}
+	public ParameterImpl define(IType type, String name) {
+		return define(type, name, false);
+	}
 	@Override
 	public List<IParameter> getParameters() {
 		return parameters;

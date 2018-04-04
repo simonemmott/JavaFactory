@@ -13,10 +13,12 @@ import com.k2.JavaFactory.spec.AnnotationWiget;
 import com.k2.JavaFactory.spec.ClassWiget;
 import com.k2.JavaFactory.spec.FieldWiget;
 import com.k2.JavaFactory.spec.InterfaceWiget;
+import com.k2.JavaFactory.spec.MethodWiget;
 import com.k2.JavaFactory.type.IAnnotation;
 import com.k2.JavaFactory.type.IClass;
 import com.k2.JavaFactory.type.IField;
 import com.k2.JavaFactory.type.IInterface;
+import com.k2.JavaFactory.type.IMethod;
 import com.k2.JavaFactory.type.Visibility;
 import com.k2.Util.StringUtil;
 import com.k2.Util.classes.Dependency;
@@ -36,7 +38,10 @@ public class ClassWigetImpl extends AJavaWiget<IClass> implements ClassWiget{
 
 		@SuppressWarnings("unchecked")
 		AssembledWiget<JavaFamily, PrintWriter, AnnotationWiget, IAnnotation> annWiget = ja.assemble(AnnotationWiget.class);
+		@SuppressWarnings("unchecked")
 		AssembledWiget<JavaFamily, PrintWriter, FieldWiget, IField> fieldWiget = ja.assemble(FieldWiget.class);
+		@SuppressWarnings("unchecked")
+		AssembledWiget<JavaFamily, PrintWriter, MethodWiget, IField> methodWiget = ja.assemble(MethodWiget.class);
 		
 		if (a.get(ClassWiget.model.includeJavaDoc)) {
 			out = outputTypeJavaDoc(ja, out, 
@@ -74,6 +79,8 @@ public class ClassWigetImpl extends AJavaWiget<IClass> implements ClassWiget{
 		out = a.outputContents(ClassWiget.model.body, out);		
 		for (IField field : a.get(ClassWiget.model.fields))
 			out = fieldWiget.output(field, out);
+		for (IMethod method : a.get(ClassWiget.model.methods))
+			out = methodWiget.output(method, out);
 		ja.outdent();
 		out.println("}");
 		
