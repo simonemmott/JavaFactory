@@ -2,6 +2,7 @@ package com.k2.JavaFactory.impl;
 
 import java.io.PrintWriter;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import com.k2.Wiget.annotation.WigetImplementation;
@@ -11,14 +12,17 @@ import com.k2.JavaFactory.JavaFactory;
 import com.k2.JavaFactory.JavaFamily;
 import com.k2.JavaFactory.spec.AnnotationWiget;
 import com.k2.JavaFactory.spec.ClassWiget;
+import com.k2.JavaFactory.spec.EnumWiget;
 import com.k2.JavaFactory.spec.FieldWiget;
 import com.k2.JavaFactory.spec.InterfaceWiget;
 import com.k2.JavaFactory.spec.MethodWiget;
 import com.k2.JavaFactory.type.IAnnotation;
 import com.k2.JavaFactory.type.IClass;
+import com.k2.JavaFactory.type.IEnum;
 import com.k2.JavaFactory.type.IField;
 import com.k2.JavaFactory.type.IInterface;
 import com.k2.JavaFactory.type.IMethod;
+import com.k2.JavaFactory.type.IType;
 import com.k2.JavaFactory.type.Visibility;
 import com.k2.Util.StringUtil;
 import com.k2.Util.classes.Dependency;
@@ -42,6 +46,12 @@ public class ClassWigetImpl extends AJavaWiget<IClass> implements ClassWiget{
 		AssembledWiget<JavaFamily, PrintWriter, FieldWiget, IField> fieldWiget = ja.assemble(FieldWiget.class);
 		@SuppressWarnings("unchecked")
 		AssembledWiget<JavaFamily, PrintWriter, MethodWiget, IField> methodWiget = ja.assemble(MethodWiget.class);
+		@SuppressWarnings("unchecked")
+		AssembledWiget<JavaFamily, PrintWriter, InterfaceWiget, IField> interfaceWiget = ja.assemble(InterfaceWiget.class);
+		@SuppressWarnings("unchecked")
+		AssembledWiget<JavaFamily, PrintWriter, ClassWiget, IField> classWiget = ja.assemble(ClassWiget.class);
+		@SuppressWarnings("unchecked")
+		AssembledWiget<JavaFamily, PrintWriter, EnumWiget, IField> enumWiget = ja.assemble(EnumWiget.class);
 		
 		if (a.get(ClassWiget.model.includeJavaDoc)) {
 			out = outputTypeJavaDoc(ja, out, 
@@ -76,13 +86,26 @@ public class ClassWigetImpl extends AJavaWiget<IClass> implements ClassWiget{
 		out.println(ja.getIndent()+"{");
 		out.println();
 		ja.indent();
-		out = a.outputContents(ClassWiget.model.body, out);		
+		out = a.outputContents(ClassWiget.model.body, out);	
+		
+		List<IType> declaredTypes = a.get(ClassWiget.model.declaredTypes);
+		if (declaredTypes != null)
+			for (IType type : declaredTypes)
+				if (type instanceof IClass)
+					out = classWiget.output((IClass)type, out);
+				else if (type instanceof IInterface)
+					out = interfaceWiget.output((IInterface)type, out);
+				else if (type instanceof IEnum)
+					out = enumWiget.output((IEnum)type, out);
+		
+		
 		for (IField field : a.get(ClassWiget.model.fields))
 			out = fieldWiget.output(field, out);
 		for (IMethod method : a.get(ClassWiget.model.methods))
 			out = methodWiget.output(method, out);
+
 		ja.outdent();
-		out.println("}");
+		out.println(ja.getIndent()+"}");
 		
 		return out;
 	}

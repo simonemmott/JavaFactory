@@ -12,15 +12,18 @@ import com.k2.JavaFactory.JavaFactory;
 import com.k2.JavaFactory.JavaFamily;
 import com.k2.JavaFactory.spec.AnnotationWiget;
 import com.k2.JavaFactory.spec.ClassWiget;
+import com.k2.JavaFactory.spec.EnumValueWiget;
 import com.k2.JavaFactory.spec.EnumWiget;
+import com.k2.JavaFactory.spec.FieldWiget;
 import com.k2.JavaFactory.spec.InterfaceWiget;
-import com.k2.JavaFactory.spec.MethodSignatureWiget;
+import com.k2.JavaFactory.spec.MethodWiget;
 import com.k2.JavaFactory.type.IAnnotation;
 import com.k2.JavaFactory.type.IClass;
 import com.k2.JavaFactory.type.IEnum;
+import com.k2.JavaFactory.type.IEnumValue;
 import com.k2.JavaFactory.type.IField;
 import com.k2.JavaFactory.type.IInterface;
-import com.k2.JavaFactory.type.IMethodSignature;
+import com.k2.JavaFactory.type.IMethod;
 import com.k2.JavaFactory.type.IType;
 import com.k2.JavaFactory.type.Visibility;
 import com.k2.Util.StringUtil;
@@ -29,20 +32,20 @@ import com.k2.Wiget.AssembledWiget;
 import com.k2.Wiget.Wiget;
 
 @WigetImplementation
-public class IntertfaceWigetImpl extends AJavaWiget<IInterface> implements InterfaceWiget{
+public class EnumWigetImpl extends AJavaWiget<IEnum> implements EnumWiget{
 	
 	@SuppressWarnings("rawtypes")
 	@Override
 	public PrintWriter output(
-			AssembledWiget<JavaFamily, PrintWriter, ? extends Wiget, IInterface> a,
+			AssembledWiget<JavaFamily, PrintWriter, ? extends Wiget, IEnum> a,
 			PrintWriter out) {
 		
 		JavaAssembly ja = (JavaAssembly)a.assembly();	
 
 		@SuppressWarnings("unchecked")
-		AssembledWiget<JavaFamily, PrintWriter, AnnotationWiget, IClass> annWiget = ja.assemble(AnnotationWiget.class);
+		AssembledWiget<JavaFamily, PrintWriter, AnnotationWiget, IAnnotation> annWiget = ja.assemble(AnnotationWiget.class);
 		@SuppressWarnings("unchecked")
-		AssembledWiget<JavaFamily, PrintWriter, MethodSignatureWiget, IMethodSignature> methWiget = ja.assemble(MethodSignatureWiget.class);
+		AssembledWiget<JavaFamily, PrintWriter, EnumValueWiget, IEnumValue> valueWiget = ja.assemble(EnumValueWiget.class);
 		@SuppressWarnings("unchecked")
 		AssembledWiget<JavaFamily, PrintWriter, InterfaceWiget, IField> interfaceWiget = ja.assemble(InterfaceWiget.class);
 		@SuppressWarnings("unchecked")
@@ -50,21 +53,21 @@ public class IntertfaceWigetImpl extends AJavaWiget<IInterface> implements Inter
 		@SuppressWarnings("unchecked")
 		AssembledWiget<JavaFamily, PrintWriter, EnumWiget, IField> enumWiget = ja.assemble(EnumWiget.class);
 		
-		if (a.get(InterfaceWiget.model.includeJavaDoc)) {
+		if (a.get(EnumWiget.model.includeJavaDoc)) {
 			out = outputTypeJavaDoc(ja, out, 
-					a.get(InterfaceWiget.model.title), 
-					a.get(InterfaceWiget.model.description), 
-					a.get(InterfaceWiget.model.author));
+					a.get(EnumWiget.model.title), 
+					a.get(EnumWiget.model.description), 
+					a.get(EnumWiget.model.author));
 		}
-		if (a.get(InterfaceWiget.model.annotations) != null) 
-			for (IAnnotation ann : a.get(InterfaceWiget.model.annotations)) {
+		if (a.get(EnumWiget.model.annotations) != null) 
+			for (IAnnotation ann : a.get(EnumWiget.model.annotations)) {
 				out = annWiget.output(ann, out);
 				out.println();
 			}
-		out.print("public interface "+a.get(InterfaceWiget.model.basename)+" ");
-		Set<IInterface> interfaces = a.get(InterfaceWiget.model.extendsInterfaces);
+		out.print(ja.getIndent()+Visibility.toJava(a.get(EnumWiget.model.visibility))+"enum "+a.get(EnumWiget.model.basename)+" ");
+		Set<IInterface> interfaces = a.get(EnumWiget.model.implementsInterfaces);
 		if (interfaces != null && interfaces.size() > 0) {
-			out.print("extends ");
+			out.print("implements ");
 			Iterator<IInterface> i = interfaces.iterator();
 			while (i.hasNext()) {
 				IInterface iFace = i.next();
@@ -76,12 +79,12 @@ public class IntertfaceWigetImpl extends AJavaWiget<IInterface> implements Inter
 					out.print(" ");
 			}
 		}
-		out.println(ja.getIndent()+"{");
-
+		out.println("{");
+		out.println();
 		ja.indent();
-		out = a.outputContents(InterfaceWiget.model.body, out);	
+
 		
-		List<IType> declaredTypes = a.get(InterfaceWiget.model.declaredTypes);
+		List<IType> declaredTypes = a.get(EnumWiget.model.declaredTypes);
 		if (declaredTypes != null)
 			for (IType type : declaredTypes)
 				if (type instanceof IClass)
@@ -91,13 +94,10 @@ public class IntertfaceWigetImpl extends AJavaWiget<IInterface> implements Inter
 				else if (type instanceof IEnum)
 					out = enumWiget.output((IEnum)type, out);
 		
-		Set<IMethodSignature> methods = a.get(InterfaceWiget.model.methods);
-		for (IMethodSignature signature : methods) {
-			out = methWiget.output(signature, out);
-			out.println(";");
-			
-		}
-		
+		for (IEnumValue value : a.get(EnumWiget.model.values))
+			out = valueWiget.output(value, out);
+		out = a.outputContents(EnumWiget.model.body, out);		
+
 		ja.outdent();
 		out.println(ja.getIndent()+"}");
 		

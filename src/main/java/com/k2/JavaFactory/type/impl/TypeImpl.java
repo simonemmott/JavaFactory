@@ -1,5 +1,7 @@
 package com.k2.JavaFactory.type.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -13,7 +15,13 @@ import com.k2.Util.classes.Dependency;
 public class TypeImpl implements IType {
 	
 	public TypeImpl(String name) { this.name = name; }
-	
+
+	protected IType declaringType;
+	@Override
+	public IType getDeclaringType() { return declaringType; }
+	@Override
+	public IType setDeclaringType(IType declaringType) { this.declaringType = declaringType; return this; }
+
 	protected String name;
 	@Override
 	public String getPackageName() { return ClassUtil.getPackageNameFromCanonicalName(name); }
@@ -64,6 +72,18 @@ public class TypeImpl implements IType {
 			annotations = new TreeSet<IAnnotation>();
 		annotations.add(annotation);
 		return this;
+	}
+
+	protected List<IType> declaredTypes;
+	@Override
+	public List<IType> getDeclaredTypes() { return declaredTypes; }
+	@SuppressWarnings("unchecked")
+	public <T extends IType> T declares(TypeImpl type, Class<T> declaringType) {
+		type.setDeclaringType(this);
+		if (declaredTypes == null)
+			declaredTypes = new ArrayList<IType>();
+		declaredTypes.add(type);
+		return (T)this;
 	}
 
 	protected Object unwrap;

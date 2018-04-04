@@ -23,14 +23,17 @@ import com.k2.JavaFactory.JavaAssembly;
 import com.k2.JavaFactory.JavaFactory;
 import com.k2.JavaFactory.spec.ClassWiget;
 import com.k2.JavaFactory.spec.CompilationUnitWiget;
+import com.k2.JavaFactory.spec.EnumWiget;
 import com.k2.JavaFactory.spec.InterfaceWiget;
 import com.k2.JavaFactory.type.IAnnotation;
 import com.k2.JavaFactory.type.IClass;
+import com.k2.JavaFactory.type.IEnum;
 import com.k2.JavaFactory.type.IInterface;
 import com.k2.JavaFactory.type.IType;
 import com.k2.JavaFactory.type.Visibility;
 import com.k2.JavaFactory.type.impl.AnnotationImpl;
 import com.k2.JavaFactory.type.impl.ClassImpl;
+import com.k2.JavaFactory.type.impl.EnumImpl;
 import com.k2.JavaFactory.type.impl.FieldImpl;
 import com.k2.JavaFactory.type.impl.InterfaceImpl;
 import com.k2.JavaFactory.type.impl.MethodImpl;
@@ -118,7 +121,7 @@ public class JavaFactoryTests {
 		
 		cu.output(iClass, new PrintWriter(sw)).flush();
 		
-		System.out.println(sw.toString());
+//		System.out.println(sw.toString());
 		
 		String expected = "package my.test;\n" + 
 				"\n" + 
@@ -161,9 +164,20 @@ public class JavaFactoryTests {
 				"	private long myLong;\n" + 
 				"	public long getMyLong() { return myLong: }\n" + 
 				"	public MyClass setMyLong( long myLong ) { this.myLong = myLong: return this; }\n" + 
+				"\n" + 
+				"	/*************************************************************************\n" + 
+				"	 * <strong>Do It</strong>\n" + 
+				"	 * Output the Do count\n" + 
+				"	 * @param count Do Count\n" + 
+				"	 */\n" + 
+				"	private void doIt(int count) {\n" + 
+				"		for (int do = 0; do<count: do++) {\n" + 
+				"			System.out.println(\"Do: \"+do);\n" + 
+				"		}\n" + 
+				"	}\n" + 
 				"}\n";
 		
-//		assertEquals(expected, sw.toString());
+		assertEquals(expected, sw.toString());
 		
 	}
 
@@ -459,4 +473,309 @@ public class JavaFactoryTests {
 
 		
 	}
+	
+	@Test
+	public void enumWigetTest() 
+    {
+		JavaFactory factory = new JavaFactory("com.k2.JavaFactory.impl", "example.wiget");
+				
+		MyClass my = new MyClass();
+		my.setAlias("myAlias");
+		my.setTitle("myTitle");
+		my.setDescription("myDescription");
+				
+		IEnum iEnum = new EnumImpl("my.test.MyEnum")
+				.setTitle("My Enumeration")
+				.setDescription("This is my enumaration")
+				.add(Dependency.forClass(Set.class))
+				.add(Dependency.forClass(HashSet.class))
+				.implementsInterface("my.test.interfaces.IMyEnum")
+				.implementsInterface("my.test.interfaces.AnotherEnum")
+				.annotate(new AnnotationImpl("my.test.annotations.OtherEnumAnnotation")
+						.define(tString, "name", false).up(AnnotationImpl.class)
+						.set("name", "iAnnotation")
+					)
+				.visibility(Visibility.PUBLIC)
+				.defineValue("ONE")
+						.setTitle("Value One")
+						.setDescription("This is the first enumeration value")
+						.annotate(new AnnotationImpl("com.k2.MetaModel.annotations.MetaSubTypeValue")
+								.define(tString, "title", false).up(AnnotationImpl.class)
+								.set("title", "Value One - Annotated")
+								.define(tString, "description", false).up(AnnotationImpl.class)
+								.set("description", "This is the first enumeration value - Annotated")
+							)
+						.up(EnumImpl.class)
+				.defineValue("TWO")
+						.annotate(new AnnotationImpl("com.k2.MetaModel.annotations.MetaSubTypeValue")
+								.define(tString, "title", false).up(AnnotationImpl.class)
+								.set("title", "Value Two - Annotated")
+								.define(tString, "description", false).up(AnnotationImpl.class)
+								.set("description", "This is the second enumeration value - Annotated")
+							)
+						.up(EnumImpl.class)
+				.wrap(my)
+			;
+		
+		JavaAssembly<CompilationUnitWiget, EnumImpl> cu = factory.getAssembly(CompilationUnitWiget.class);
+		cu.root()
+			.add(CompilationUnitWiget.model.body, EnumWiget.class)
+				.add(EnumWiget.model.body, MyWiget.class, EnumWiget.model.unwrap);
+		
+		StringWriter sw = new StringWriter();
+		
+		cu.output(iEnum, new PrintWriter(sw)).flush();
+		
+//		System.out.println(sw.toString());
+		
+		String expected = "package my.test;\n" + 
+				"\n" + 
+				"import java.util.HashSet;\n" + 
+				"import java.util.Set;\n" + 
+				"\n" + 
+				"import com.k2.MetaModel.annotations.MetaSubTypeValue;\n" + 
+				"import my.test.annotations.OtherEnumAnnotation;\n" + 
+				"import my.test.interfaces.AnotherEnum;\n" + 
+				"import my.test.interfaces.IMyEnum;\n" + 
+				"\n" + 
+				"/*************************************************************************\n" + 
+				" * <strong>My Enumeration</stong>\n" + 
+				" * This is my enumaration\n" + 
+				" */\n" + 
+				"@OtherEnumAnnotation(name = \"iAnnotation\")\n" + 
+				"public enum MyEnum implements AnotherEnum, IMyEnum {\n" + 
+				"\n" + 
+				"\n" + 
+				"	/*************************************************************************\n" + 
+				"	 * <strong>Value One</stong>\n" + 
+				"	 * This is the first enumeration value\n" + 
+				"	 */\n" + 
+				"	@MetaSubTypeValue(title = \"Value One - Annotated\", \n" + 
+				"		description = \"This is the first enumeration value - Annotated\")\n" + 
+				"	ONE;\n" + 
+				"\n" + 
+				"	@MetaSubTypeValue(title = \"Value Two - Annotated\", \n" + 
+				"		description = \"This is the second enumeration value - Annotated\")\n" + 
+				"	TWO;\n" + 
+				"	myAlias: myAlias\n" + 
+				"	myTitle: myTitle\n" + 
+				"	myDescription: myDescription\n" + 
+				"}\n";
+		
+		assertEquals(expected, sw.toString());
+		
+	}
+
+	@Test
+	public void embeddedTypesWigetTest() 
+    {
+		JavaFactory factory = new JavaFactory("com.k2.JavaFactory.impl", "example.wiget");
+
+		
+		IClass iClass = new ClassImpl("my.test.MyClass")
+				.setTitle("My Class")
+				.setDescription("This is my class")
+				.extendsClass(new ClassImpl("my.test.myType"))
+				.implementsInterface("my.test.interfaces.IMyClass")
+				.annotate(new AnnotationImpl("my.test.annotations.OtherAnnotation")
+						.define(tString, "name", false).up(AnnotationImpl.class)
+						.set("name", "iAnnotation")
+					)
+				.visibility(Visibility.PUBLIC)
+				.declares(
+						new EnumImpl("my.test.MyEnum")
+								.setTitle("My Enumeration")
+								.setDescription("This is my enumaration")
+								.implementsInterface("my.test.interfaces.IMyEnum")
+								.annotate(new AnnotationImpl("my.test.annotations.OtherEnumAnnotation")
+										.define(tString, "name", false).up(AnnotationImpl.class)
+										.set("name", "iAnnotation")
+									)
+								.visibility(Visibility.PUBLIC)
+								.defineValue("ONE")
+										.setTitle("Value One")
+										.setDescription("This is the first enumeration value")
+										.annotate(new AnnotationImpl("com.k2.MetaModel.annotations.MetaSubTypeValue")
+												.define(tString, "title", false).up(AnnotationImpl.class)
+												.set("title", "Value One - Annotated")
+												.define(tString, "description", false).up(AnnotationImpl.class)
+												.set("description", "This is the first enumeration value - Annotated")
+											)
+										.up(EnumImpl.class)
+								.defineValue("TWO")
+										.annotate(new AnnotationImpl("com.k2.MetaModel.annotations.MetaSubTypeValue")
+												.define(tString, "title", false).up(AnnotationImpl.class)
+												.set("title", "Value Two - Annotated")
+												.define(tString, "description", false).up(AnnotationImpl.class)
+												.set("description", "This is the second enumeration value - Annotated")
+											)
+										.up(EnumImpl.class),
+						ClassImpl.class)
+				.declares(
+						new EnumImpl("my.test.MyOtherEnum")
+								.setTitle("My Other Enumeration")
+								.setDescription("This is my other enumaration")
+								.implementsInterface("my.test.interfaces.AnotherEnum")
+								.annotate(new AnnotationImpl("my.test.annotations.OtherEnumAnnotation")
+										.define(tString, "name", false).up(AnnotationImpl.class)
+										.set("name", "iAnnotation")
+									)
+								.visibility(Visibility.PUBLIC)
+								.defineValue("AAA")
+										.setTitle("Value One")
+										.setDescription("This is the first enumeration value")
+										.annotate(new AnnotationImpl("com.k2.MetaModel.annotations.MetaSubTypeValue")
+												.define(tString, "title", false).up(AnnotationImpl.class)
+												.set("title", "Value One - Annotated")
+												.define(tString, "description", false).up(AnnotationImpl.class)
+												.set("description", "This is the first enumeration value - Annotated")
+											)
+										.up(EnumImpl.class)
+								.defineValue("BBB")
+										.annotate(new AnnotationImpl("com.k2.MetaModel.annotations.MetaSubTypeValue")
+												.define(tString, "title", false).up(AnnotationImpl.class)
+												.set("title", "Value Two - Annotated")
+												.define(tString, "description", false).up(AnnotationImpl.class)
+												.set("description", "This is the second enumeration value - Annotated")
+											)
+										.up(EnumImpl.class),
+						ClassImpl.class)
+				.defineField(Visibility.PUBLIC, tFloat, "myFloat")
+						.setTitle("My Float")
+						.setDescription("This field is my float")
+						.annotate(new AnnotationImpl("javax.persistence.Column")
+								.define(tString, "name", false).up(AnnotationImpl.class)
+								.set("name", "MYFLOAT")
+							)
+						.up(ClassImpl.class)
+				.defineField(tLong, "myLong")
+						.setTitle("My Long")
+						.setDescription("This field is the ID field\nAnd my long field")
+						.annotate(new AnnotationImpl("javax.persistence.Id"))
+						.annotate(new AnnotationImpl("javax.persistence.Column")
+								.define(tString, "name", false).up(AnnotationImpl.class)
+								.set("name", "MYLONG")
+							)
+						.up(ClassImpl.class)
+				.defineMethod(Visibility.PRIVATE, "doIt")
+						.setTitle("Do It")
+						.setDescription("Output the Do count")
+						.define(tInt, "count")
+								.setTitle("Do Count")
+								.up(MethodImpl.class)
+						.setMethodBody(
+								"for (int do = 0; do<count: do++) {\n"+
+								"	System.out.println(\"Do: \"+do);\n"+
+								"}"
+						)
+						.up(ClassImpl.class)
+			;
+		
+		JavaAssembly<CompilationUnitWiget, EnumImpl> cu = factory.getAssembly(CompilationUnitWiget.class);
+		cu.root()
+			.add(CompilationUnitWiget.model.body, ClassWiget.class);
+		
+		StringWriter sw = new StringWriter();
+		
+		cu.output(iClass, new PrintWriter(sw)).flush();
+		
+//		System.out.println(sw.toString());
+		
+		String expected = "package my.test;\n" + 
+				"\n" + 
+				"\n" + 
+				"import com.k2.MetaModel.annotations.MetaSubTypeValue;\n" + 
+				"import javax.persistence.Column;\n" + 
+				"import javax.persistence.Id;\n" + 
+				"import my.test.annotations.OtherAnnotation;\n" + 
+				"import my.test.annotations.OtherEnumAnnotation;\n" + 
+				"import my.test.interfaces.AnotherEnum;\n" + 
+				"import my.test.interfaces.IMyClass;\n" + 
+				"import my.test.interfaces.IMyEnum;\n" + 
+				"\n" + 
+				"/*************************************************************************\n" + 
+				" * <strong>My Class</stong>\n" + 
+				" * This is my class\n" + 
+				" */\n" + 
+				"@OtherAnnotation(name = \"iAnnotation\")\n" + 
+				"public class MyClass extends myType implements IMyClass {\n" + 
+				"\n" + 
+				"	/*************************************************************************\n" + 
+				"	 * <strong>My Enumeration</stong>\n" + 
+				"	 * This is my enumaration\n" + 
+				"	 */\n" + 
+				"	@OtherEnumAnnotation(name = \"iAnnotation\")\n" + 
+				"	public enum MyEnum implements IMyEnum {\n" + 
+				"\n" + 
+				"\n" + 
+				"		/*************************************************************************\n" + 
+				"		 * <strong>Value One</stong>\n" + 
+				"		 * This is the first enumeration value\n" + 
+				"		 */\n" + 
+				"		@MetaSubTypeValue(title = \"Value One - Annotated\", \n" + 
+				"			description = \"This is the first enumeration value - Annotated\")\n" + 
+				"		ONE;\n" + 
+				"\n" + 
+				"		@MetaSubTypeValue(title = \"Value Two - Annotated\", \n" + 
+				"			description = \"This is the second enumeration value - Annotated\")\n" + 
+				"		TWO;\n" + 
+				"	}\n" + 
+				"	/*************************************************************************\n" + 
+				"	 * <strong>My Other Enumeration</stong>\n" + 
+				"	 * This is my other enumaration\n" + 
+				"	 */\n" + 
+				"	@OtherEnumAnnotation(name = \"iAnnotation\")\n" + 
+				"	public enum MyOtherEnum implements AnotherEnum {\n" + 
+				"\n" + 
+				"\n" + 
+				"		/*************************************************************************\n" + 
+				"		 * <strong>Value One</stong>\n" + 
+				"		 * This is the first enumeration value\n" + 
+				"		 */\n" + 
+				"		@MetaSubTypeValue(title = \"Value One - Annotated\", \n" + 
+				"			description = \"This is the first enumeration value - Annotated\")\n" + 
+				"		AAA;\n" + 
+				"\n" + 
+				"		@MetaSubTypeValue(title = \"Value Two - Annotated\", \n" + 
+				"			description = \"This is the second enumeration value - Annotated\")\n" + 
+				"		BBB;\n" + 
+				"	}\n" + 
+				"\n" + 
+				"	/*************************************************************************\n" + 
+				"	 * <strong>My Float</stong>\n" + 
+				"	 * This field is my float\n" + 
+				"	 */\n" + 
+				"	@Column(name = \"MYFLOAT\")\n" + 
+				"	public float myFloat;\n" + 
+				"	public float getMyFloat() { return myFloat: }\n" + 
+				"	public MyClass setMyFloat( float myFloat ) { this.myFloat = myFloat: return this; }\n" + 
+				"\n" + 
+				"	/*************************************************************************\n" + 
+				"	 * <strong>My Long</stong>\n" + 
+				"	 * This field is the ID field\n" + 
+				"	 * And my long field\n" + 
+				"	 */\n" + 
+				"	@Column(name = \"MYLONG\")\n" + 
+				"	@Id\n" + 
+				"	private long myLong;\n" + 
+				"	public long getMyLong() { return myLong: }\n" + 
+				"	public MyClass setMyLong( long myLong ) { this.myLong = myLong: return this; }\n" + 
+				"\n" + 
+				"	/*************************************************************************\n" + 
+				"	 * <strong>Do It</strong>\n" + 
+				"	 * Output the Do count\n" + 
+				"	 * @param count Do Count\n" + 
+				"	 */\n" + 
+				"	private void doIt(int count) {\n" + 
+				"		for (int do = 0; do<count: do++) {\n" + 
+				"			System.out.println(\"Do: \"+do);\n" + 
+				"		}\n" + 
+				"	}\n" + 
+				"}\n";
+		
+		assertEquals(expected, sw.toString());
+		
+	}
+
+
 }
