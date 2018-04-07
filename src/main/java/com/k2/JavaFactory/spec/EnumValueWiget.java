@@ -15,6 +15,14 @@ import com.k2.JavaFactory.type.wigetModel.IMethodSignature_;
 import com.k2.Wiget.WigetContainer;
 import com.k2.Wiget.WigetParameter;
 
+/**
+ * This wiget output the java source code for an enumeration value
+ * 
+ * This wiget should only be included within an enumeration wiget
+ * 
+ * @author simon
+ *
+ */
 @WigetSpecification
 public interface EnumValueWiget extends JavaWiget<IEnumValue> {
 	

@@ -9,6 +9,13 @@ import com.k2.JavaFactory.type.wigetModel.IInterface_;
 import com.k2.Wiget.WigetContainer;
 import com.k2.Wiget.WigetParameter;
 
+/**
+ * This wiget writes a java type of interface
+ * The wiget does not include the package clause of the list of dependencies to allow the interface wiget to be embedded in other wigets
+ * 
+ * @author simon
+ *
+ */
 @WigetSpecification
 public interface InterfaceWiget extends JavaWiget<IInterface> {
 	

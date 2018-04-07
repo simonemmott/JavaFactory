@@ -1,0 +1,8 @@
+com.k2.JavaFactory
+com.k2.JavaFactory.impl
+com.k2.JavaFactory.spec
+com.k2.JavaFactory.type
+com.k2.JavaFactory.type.impl
+com.k2.JavaFactory.type.wigetModel
+example.model
+example.wiget

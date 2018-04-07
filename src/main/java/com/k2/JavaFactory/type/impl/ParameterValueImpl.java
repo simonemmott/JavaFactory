@@ -3,11 +3,22 @@ package com.k2.JavaFactory.type.impl;
 import com.k2.JavaFactory.type.IParameter;
 import com.k2.JavaFactory.type.IParameterValue;
 
+/**
+ * A basic implementation of the IParameterValue interface
+ * 
+ * @author simon
+ *
+ */
 public class ParameterValueImpl implements IParameterValue {
 
 	private IParameter parameter;
 	private Object value;
 	
+	/**
+	 * Create a parameter value for the given parameter
+	 * @param parameter	The parameter being valued
+	 * @param value		The value of the parameter
+	 */
 	public ParameterValueImpl(IParameter parameter, Object value) {
 		this.parameter = parameter;
 		this.value = value;

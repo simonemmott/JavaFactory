@@ -17,7 +17,7 @@ import com.k2.Wiget.WigetFactory;
 /**
  * The template assembly that is used to assemble template wigets
  * 
- * The indentation functionality is additional to the functionality required by the raw wiget assembly and are used by all template wigets
+ * The indentation functionality is additional to the functionality required by the raw wiget assembly and are used by all java wigets
  * 
  * @author simon
  *
@@ -30,8 +30,8 @@ public class JavaAssembly<W extends Wiget,T> extends WigetAssembly<JavaFamily,Pr
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	/**
-	 * Create a template assembly for the given factory and root wiget type, using an indent string of '\t'
-	 * @param factory	The TemplateFactory instance being used
+	 * Create a java assembly for the given factory and root wiget type, using an indent string of '\t'
+	 * @param factory	The JavaFactory instance being used
 	 * @param wigetType	The wiget type of the root assembly
 	 */
 	public JavaAssembly(
@@ -42,8 +42,8 @@ public class JavaAssembly<W extends Wiget,T> extends WigetAssembly<JavaFamily,Pr
 	}
 	
 	/**
-	 * Create a template assembly for the given template factory, root wiget type and indent string
-	 * @param factory	The TemplateFactory instance being used
+	 * Create a java assembly for the given java factory, root wiget type and indent string
+	 * @param factory	The JavaFactory instance being used
 	 * @param wigetType	The wiget type of the root assembly
 	 * @param indentStr	The String to use for each indentation
 	 */
@@ -85,20 +85,39 @@ public class JavaAssembly<W extends Wiget,T> extends WigetAssembly<JavaFamily,Pr
 	public String getIndent(boolean inline) { return (inline) ? "" : currentIndent; }
 	
 	private Dependencies dependencies;
+	/**
+	 * This method setup the dependencies of this assembly to manage the dependencies for the named type.
+	 * @param name	The name (including package) of the java type being assembled
+	 */
 	public void dependenciesForName(String name) {
 		dependencies = Dependencies.forName(name);
 		logger.trace("Setting dependnecies on java factory {} to {}", this, dependencies);
 	}
+	
+	/**
+	 * @return	The dependencies of the assembled java type if a java type was named using `depemdenciesForName()` or the full list of classes
+	 * included in the java assembly if no type has been named
+	 */
 	public Set<Dependency> getDependencies() {
 		if (dependencies!=null)
 			return dependencies.getDependencies();
 		return new HashSet<Dependency>(0);
 	}
+	
+	/**
+	 * The the given class as a dependency for this assembly
+	 * @param cls	The class on which this assembly depends
+	 */
 	public void addDependencyFor(Class<?> cls) {
 		if (dependencies==null)
 			dependencies = new Dependencies();
 		dependencies.add(cls);
 	}
+	
+	/**
+	 * The name of a class on which this java assembly will depend
+	 * @param className	The dependency class name
+	 */
 	public void addDependencyFor(String className) {
 		if (dependencies==null)
 			dependencies = new Dependencies();

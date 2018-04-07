@@ -13,6 +13,14 @@ import com.k2.JavaFactory.type.wigetModel.IMethodSignature_;
 import com.k2.Wiget.WigetContainer;
 import com.k2.Wiget.WigetParameter;
 
+/**
+ * This wiget writes fields of java class
+ * 
+ * The java field wiget includes getters and setters, javadoc and annotations
+ *
+ * @author simon
+ *
+ */
 @WigetSpecification
 public interface FieldWiget extends JavaWiget<IField> {
 	

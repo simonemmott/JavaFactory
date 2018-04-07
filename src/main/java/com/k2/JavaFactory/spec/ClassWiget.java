@@ -7,6 +7,13 @@ import com.k2.JavaFactory.type.wigetModel.IClass_;
 import com.k2.Wiget.WigetContainer;
 import com.k2.Wiget.WigetParameter;
 
+/**
+ * This wiget writes a java type of class
+ * The wiget does not include the package clause of the list of dependencies to allow the class wiget to be embedded in other wigets
+ * 
+ * @author simon
+ *
+ */
 @WigetSpecification
 public interface ClassWiget extends JavaWiget<IClass> {
 	

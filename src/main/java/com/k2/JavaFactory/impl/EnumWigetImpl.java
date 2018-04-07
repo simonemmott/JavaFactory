@@ -8,29 +8,30 @@ import java.util.Set;
 import com.k2.Wiget.annotation.WigetImplementation;
 import com.k2.JavaFactory.AJavaWiget;
 import com.k2.JavaFactory.JavaAssembly;
-import com.k2.JavaFactory.JavaFactory;
 import com.k2.JavaFactory.JavaFamily;
 import com.k2.JavaFactory.spec.AnnotationWiget;
 import com.k2.JavaFactory.spec.ClassWiget;
 import com.k2.JavaFactory.spec.EnumValueWiget;
 import com.k2.JavaFactory.spec.EnumWiget;
-import com.k2.JavaFactory.spec.FieldWiget;
 import com.k2.JavaFactory.spec.InterfaceWiget;
-import com.k2.JavaFactory.spec.MethodWiget;
 import com.k2.JavaFactory.type.IAnnotation;
 import com.k2.JavaFactory.type.IClass;
 import com.k2.JavaFactory.type.IEnum;
 import com.k2.JavaFactory.type.IEnumValue;
 import com.k2.JavaFactory.type.IField;
 import com.k2.JavaFactory.type.IInterface;
-import com.k2.JavaFactory.type.IMethod;
 import com.k2.JavaFactory.type.IType;
 import com.k2.JavaFactory.type.Visibility;
-import com.k2.Util.StringUtil;
-import com.k2.Util.classes.Dependency;
 import com.k2.Wiget.AssembledWiget;
 import com.k2.Wiget.Wiget;
 
+/**
+ * This wiget writes a java type of enum
+ * The wiget does not include the package clause of the list of dependencies to allow the enum wiget to be embedded in other type wigets
+ * 
+ * @author simon
+ *
+ */
 @WigetImplementation
 public class EnumWigetImpl extends AJavaWiget<IEnum> implements EnumWiget{
 	
@@ -42,28 +43,29 @@ public class EnumWigetImpl extends AJavaWiget<IEnum> implements EnumWiget{
 		
 		JavaAssembly ja = (JavaAssembly)a.assembly();	
 
-		@SuppressWarnings("unchecked")
-		AssembledWiget<JavaFamily, PrintWriter, AnnotationWiget, IAnnotation> annWiget = ja.assemble(AnnotationWiget.class);
+		// Get wigets for the other types that may be included in this wiget
 		@SuppressWarnings("unchecked")
 		AssembledWiget<JavaFamily, PrintWriter, EnumValueWiget, IEnumValue> valueWiget = ja.assemble(EnumValueWiget.class);
-		@SuppressWarnings("unchecked")
-		AssembledWiget<JavaFamily, PrintWriter, InterfaceWiget, IField> interfaceWiget = ja.assemble(InterfaceWiget.class);
-		@SuppressWarnings("unchecked")
-		AssembledWiget<JavaFamily, PrintWriter, ClassWiget, IField> classWiget = ja.assemble(ClassWiget.class);
-		@SuppressWarnings("unchecked")
-		AssembledWiget<JavaFamily, PrintWriter, EnumWiget, IField> enumWiget = ja.assemble(EnumWiget.class);
 		
+		// Wrtier the enum java doc
 		if (a.get(EnumWiget.model.includeJavaDoc)) {
 			out = outputTypeJavaDoc(ja, out, 
 					a.get(EnumWiget.model.title), 
 					a.get(EnumWiget.model.description), 
 					a.get(EnumWiget.model.author));
 		}
-		if (a.get(EnumWiget.model.annotations) != null) 
+		
+		// Writer the annotations of the wiget
+		if (a.get(EnumWiget.model.annotations) != null) {
+			@SuppressWarnings("unchecked")
+			AssembledWiget<JavaFamily, PrintWriter, AnnotationWiget, IAnnotation> annWiget = ja.assemble(AnnotationWiget.class);
 			for (IAnnotation ann : a.get(EnumWiget.model.annotations)) {
 				out = annWiget.output(ann, out);
 				out.println();
 			}
+		}
+		
+		// Write the enum clause including the implements clause
 		out.print(ja.getIndent()+Visibility.toJava(a.get(EnumWiget.model.visibility))+"enum "+a.get(EnumWiget.model.basename)+" ");
 		Set<IInterface> interfaces = a.get(EnumWiget.model.implementsInterfaces);
 		if (interfaces != null && interfaces.size() > 0) {
@@ -81,23 +83,38 @@ public class EnumWigetImpl extends AJavaWiget<IEnum> implements EnumWiget{
 		}
 		out.println("{");
 		out.println();
+		
+		// Increase the indent
 		ja.indent();
 
-		
+		// Write the included java types
 		List<IType> declaredTypes = a.get(EnumWiget.model.declaredTypes);
 		if (declaredTypes != null)
 			for (IType type : declaredTypes)
-				if (type instanceof IClass)
+				if (type instanceof IClass) {
+					@SuppressWarnings("unchecked")
+					AssembledWiget<JavaFamily, PrintWriter, ClassWiget, IField> classWiget = ja.assemble(ClassWiget.class);
 					out = classWiget.output((IClass)type, out);
-				else if (type instanceof IInterface)
+				}
+				else if (type instanceof IInterface) {
+					@SuppressWarnings("unchecked")
+					AssembledWiget<JavaFamily, PrintWriter, InterfaceWiget, IField> interfaceWiget = ja.assemble(InterfaceWiget.class);
 					out = interfaceWiget.output((IInterface)type, out);
-				else if (type instanceof IEnum)
+				}
+				else if (type instanceof IEnum) {
+					@SuppressWarnings("unchecked")
+					AssembledWiget<JavaFamily, PrintWriter, EnumWiget, IField> enumWiget = ja.assemble(EnumWiget.class);
 					out = enumWiget.output((IEnum)type, out);
+				}
 		
+		// Write the enum values
 		for (IEnumValue value : a.get(EnumWiget.model.values))
 			out = valueWiget.output(value, out);
+		
+		// Write the wigets that have been included in this wigets body container
 		out = a.outputContents(EnumWiget.model.body, out);		
 
+		// Decrease the indent and close the enum
 		ja.outdent();
 		out.println(ja.getIndent()+"}");
 		

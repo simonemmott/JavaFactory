@@ -8,24 +8,26 @@ import java.util.Set;
 import com.k2.Wiget.annotation.WigetImplementation;
 import com.k2.JavaFactory.AJavaWiget;
 import com.k2.JavaFactory.JavaAssembly;
-import com.k2.JavaFactory.JavaFactory;
 import com.k2.JavaFactory.JavaFamily;
 import com.k2.JavaFactory.spec.AnnotationWiget;
-import com.k2.JavaFactory.spec.ClassWiget;
-import com.k2.JavaFactory.spec.InterfaceWiget;
 import com.k2.JavaFactory.spec.MethodSignatureWiget;
 import com.k2.JavaFactory.type.IAnnotation;
-import com.k2.JavaFactory.type.IClass;
-import com.k2.JavaFactory.type.IInterface;
 import com.k2.JavaFactory.type.IMethodSignature;
 import com.k2.JavaFactory.type.IParameter;
 import com.k2.JavaFactory.type.IType;
 import com.k2.JavaFactory.type.Visibility;
-import com.k2.Util.StringUtil;
-import com.k2.Util.classes.Dependency;
 import com.k2.Wiget.AssembledWiget;
 import com.k2.Wiget.Wiget;
 
+/**
+ * Write the method signature 
+ * 
+ * The method signature wiget does not end with a new line, neither does it end with a ';' this allows the method signature wiget to be used to write
+ * the method signature of both interface method signatures and class method signatures
+ * 
+ * @author simon
+ *
+ */
 @WigetImplementation
 public class MethodSignatureWigetImpl extends AJavaWiget<IMethodSignature> implements MethodSignatureWiget{
 	
@@ -45,6 +47,7 @@ public class MethodSignatureWigetImpl extends AJavaWiget<IMethodSignature> imple
 
 		out.println();
 
+		//Write the methods javadoc
 		if (a.get(MethodSignatureWiget.model.includeJavaDoc)) {
 			out = outputMethodJavaDoc(ja, out, 
 					a.get(MethodSignatureWiget.model.title), 
@@ -52,7 +55,8 @@ public class MethodSignatureWigetImpl extends AJavaWiget<IMethodSignature> imple
 					parms,
 					a.get(MethodSignatureWiget.model.returnTypeDescription));
 		}
-			
+		
+		// Write the annotations of the method
 		if (a.get(MethodSignatureWiget.model.annotations) != null) 
 			for (IAnnotation ann : a.get(MethodSignatureWiget.model.annotations)) {
 				out = annWiget.output(ann, out);
@@ -61,6 +65,7 @@ public class MethodSignatureWigetImpl extends AJavaWiget<IMethodSignature> imple
 		
 		Visibility v = a.get(MethodSignatureWiget.model.visibility);
 
+		// Write the method clause
 		out.print(ja.getIndent()+Visibility.toJava(v));
 		IType returnType = a.get(MethodSignatureWiget.model.returnType);
 		if (returnType == null) {
@@ -72,6 +77,7 @@ public class MethodSignatureWigetImpl extends AJavaWiget<IMethodSignature> imple
 		
 		out.print(a.get(MethodSignatureWiget.model.name)+"(");
 		
+		// Write the parameters with their annotations
 		i = parms.iterator();
 		annWiget.set(AnnotationWiget.model.inline, true);
 		while (i.hasNext()) {
@@ -89,6 +95,8 @@ public class MethodSignatureWigetImpl extends AJavaWiget<IMethodSignature> imple
 				out.print(", ");
 			}
 		
+		
+		// End the method signature without a ';'
 		out.print(")");
 		
 		

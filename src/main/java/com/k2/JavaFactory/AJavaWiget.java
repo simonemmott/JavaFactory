@@ -4,20 +4,28 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
 
-import com.k2.JavaFactory.spec.InterfaceWiget;
-import com.k2.JavaFactory.spec.MethodSignatureWiget;
 import com.k2.JavaFactory.type.IParameter;
 import com.k2.Util.StringUtil;
 import com.k2.Wiget.AWiget;
 
 /**
- * This abstract class defines the Family and Output type that is used by all Template witer wigets
+ * This abstract class defines the Family and Output type that is used by all Java wigets
  * @author simon
  *
  * @param <T>	The required data type of the wiget
  */
 public abstract class AJavaWiget<T> extends AWiget<JavaFamily, PrintWriter, T> {
 	
+	/**
+	 * This method writes the Javadoc comments for a java type on to the given print writer.
+	 * @param ja		The JavaAssembly that is assembling the java type
+	 * @param out	The PrintWriter on which the java type is being written
+	 * @param title	The title of the java type
+	 * @param description	The description of the java type
+	 * @param author		The author of the java type
+	 * @return	The PrintWriter after writing the java type.
+	 */
+	@SuppressWarnings("rawtypes")
 	protected PrintWriter outputTypeJavaDoc(JavaAssembly ja, PrintWriter out, String title, String description, String author) {
 		out.println(ja.getIndent()+"/*************************************************************************");
 		if (StringUtil.isSet(title))
@@ -30,6 +38,15 @@ public abstract class AJavaWiget<T> extends AWiget<JavaFamily, PrintWriter, T> {
 		return out;
 	}
 	
+	/**
+	 * This method writes the Javadoc comments for a field on the given print writer
+	 * @param ja		The JavaAssembly that is assembling the java type
+	 * @param out	The PrintWriter on which the java type is being written
+	 * @param title	The title of the field
+	 * @param description	The description of the field
+	 * @return	The PrintWriter after writing the field.
+	 */
+	@SuppressWarnings("rawtypes")
 	protected PrintWriter outputFieldJavaDoc(JavaAssembly ja, PrintWriter out, String title, String description) {
 		out.println(ja.getIndent()+"/*************************************************************************");
 		if (StringUtil.isSet(title))
@@ -40,10 +57,17 @@ public abstract class AJavaWiget<T> extends AWiget<JavaFamily, PrintWriter, T> {
 		return out;
 	}
 	
-	
-	
-	
-	
+	/**
+	 * This method writes the Javadoc comments for a method on the given print writer 
+	 * @param ja		The JavaAssembly that is assembling the java type
+	 * @param out	The PrintWriter on which the java type is being written
+	 * @param title	The title of the method
+	 * @param description	The description of the method
+	 * @param parameters		The parameters of the method
+	 * @param returnTypeDescription	The description of the return type
+	 * @return	The PrintWriter after writing the method.
+	 */
+	@SuppressWarnings("rawtypes")
 	protected PrintWriter outputMethodJavaDoc(JavaAssembly ja, PrintWriter out, String title, String description, List<IParameter> parameters, String returnTypeDescription) {
 		out.println(ja.getIndent()+"/*************************************************************************");
 		if (StringUtil.isSet(title))

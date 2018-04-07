@@ -4,19 +4,23 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.k2.JavaFactory.type.IAnnotation;
-import com.k2.JavaFactory.type.IClass;
 import com.k2.JavaFactory.type.IEnum;
 import com.k2.JavaFactory.type.IEnumValue;
-import com.k2.JavaFactory.type.IField;
-import com.k2.JavaFactory.type.IType;
-import com.k2.JavaFactory.type.Visibility;
 import com.k2.Util.StringUtil;
-import com.k2.Util.classes.ClassUtil;
-import com.k2.Util.classes.Dependencies;
-import com.k2.Util.classes.Dependency;
 
+/**
+ * A basic implementation of the IEnumValue interface
+ * 
+ * @author simon
+ *
+ */
 public class EnumValueImpl implements IEnumValue, Comparable<IEnumValue> {
 	
+	/**
+	 * Declare a value for the given Enum
+	 * @param declaringEnum	The enum fow which this will be a value
+	 * @param name	The name of the enumerated value
+	 */
 	public EnumValueImpl(IEnum declaringEnum, String name) { 
 		this.declaringEnum = declaringEnum; 
 		this.name = name; 
@@ -30,6 +34,11 @@ public class EnumValueImpl implements IEnumValue, Comparable<IEnumValue> {
 	private String title;
 	@Override
 	public String getTitle() { return title; }
+	/**
+	 * Set the title of this enumerated value
+	 * @param title	The title of this enumerated value
+	 * @return	This enumerated value for method chaining
+	 */
 	public EnumValueImpl setTitle(String title) {
 		this.title = title;
 		return this;
@@ -38,6 +47,11 @@ public class EnumValueImpl implements IEnumValue, Comparable<IEnumValue> {
 	private String description;
 	@Override
 	public String getDescription() { return description; }
+	/**
+	 * Set the description of this enumerated value
+	 * @param description	The description of this enumerated value
+	 * @return	This enumerated value for method chaining
+	 */
 	public EnumValueImpl setDescription(String description) {
 		this.description = description;
 		return this;
@@ -46,6 +60,11 @@ public class EnumValueImpl implements IEnumValue, Comparable<IEnumValue> {
 	private Boolean includeJavaDoc;
 	@Override
 	public boolean getIncludeJavaDoc() { return (includeJavaDoc==null) ? (StringUtil.isSet(title) || StringUtil.isSet(description)) : includeJavaDoc; }
+	/**
+	 * Set this enumarated value to have its javadoc included or excluded. If the title or description are set the default it to include the javadoc
+	 * @param includeJavaDoc		True if the javasoc should be included in the generated source code
+	 * @return		This enumerated value for method chainging
+	 */
 	public EnumValueImpl setIncludeJavaDoc(Boolean includeJavaDoc) {
 		this.includeJavaDoc = includeJavaDoc;
 		return this;
@@ -54,6 +73,11 @@ public class EnumValueImpl implements IEnumValue, Comparable<IEnumValue> {
 	protected Set<IAnnotation> annotations;
 	@Override
 	public Set<IAnnotation> getAnnotations() { return annotations; }
+	/**
+	 * Annotate the enumerated value with the annotation
+	 * @param annotation		The annotation to add to the enumerated value
+	 * @return		The enumerated value for method chaining
+	 */
 	public EnumValueImpl annotate(IAnnotation annotation) {
 		if (annotations == null)
 			annotations = new TreeSet<IAnnotation>();
@@ -64,6 +88,11 @@ public class EnumValueImpl implements IEnumValue, Comparable<IEnumValue> {
 	protected Object unwrap;
 	@Override
 	public Object getUnwrap() { return (unwrap==null) ? this : unwrap; }
+	/**
+	 * Wrap the given object to be returned as the unwrap parameter in the wiget
+	 * @param wrap	The object to wrap
+	 * @return	This enumerated value for method chaining
+	 */
 	public EnumValueImpl wrap(Object wrap) { this.unwrap = wrap; return this; }
 
 

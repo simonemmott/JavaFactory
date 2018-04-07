@@ -9,6 +9,13 @@ import com.k2.JavaFactory.type.wigetModel.IEnum_;
 import com.k2.Wiget.WigetContainer;
 import com.k2.Wiget.WigetParameter;
 
+/**
+ * This wiget writes a java type of enum
+ * The wiget does not include the package clause of the list of dependencies to allow the enum wiget to be embedded in other type wigets
+ * 
+ * @author simon
+ *
+ */
 @WigetSpecification
 public interface EnumWiget extends JavaWiget<IEnum> {
 	

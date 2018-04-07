@@ -4,18 +4,26 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.k2.JavaFactory.type.IAnnotation;
-import com.k2.JavaFactory.type.IClass;
 import com.k2.JavaFactory.type.IParameter;
 import com.k2.JavaFactory.type.IType;
 import com.k2.JavaFactory.type.wigetModel.ParameterContainer;
-import com.k2.Util.classes.ClassUtil;
-import com.k2.Util.classes.Dependencies;
-import com.k2.Util.classes.Dependency;
 
+/**
+ * A basic implementation of the IParameter interface
+ * 
+ * @author simon
+ *
+ */
 public class ParameterImpl implements IParameter {
 	
 	private ParameterContainer owner;
 	private String name;
+	/**
+	 * Create a parameter for the given parameter container of the given type and name
+	 * @param owner		The parameter container
+	 * @param type		The type of the parameter
+	 * @param name		The name of the parameter
+	 */
 	public ParameterImpl(ParameterContainer owner, IType type, String name) { 
 		this.owner = owner;
 		this.type = type;
@@ -32,11 +40,20 @@ public class ParameterImpl implements IParameter {
 	private boolean isVarArgs = false;
 	@Override
 	public boolean getIsVarArgs() { return isVarArgs; }
+	/**
+	 * make this parameter an array type parameter
+	 * @return	This parameter for method chaining
+	 */
 	public ParameterImpl varArgs() { isVarArgs = true; return this; }
 
 	private String title;
 	@Override
 	public String getTitle() { return title; }
+	/**
+	 * Set the title of the parameter
+	 * @param title	The title of the parameter
+	 * @return		This parameter for method chaining
+	 */
 	public ParameterImpl setTitle(String title) {
 		this.title = title;
 		return this;
@@ -45,6 +62,11 @@ public class ParameterImpl implements IParameter {
 	private String description;
 	@Override
 	public String getDescription() { return description; }
+	/**
+	 * Set the description of this parameter
+	 * @param description	The description of this parameter
+	 * @return	The parameter for method chaining
+	 */
 	public ParameterImpl setDescription(String description) {
 		this.description = description;
 		return this;
@@ -58,6 +80,11 @@ public class ParameterImpl implements IParameter {
 	private Set<IAnnotation> annotations;
 	@Override
 	public Set<IAnnotation> getAnnotations() { return annotations; }
+	/**
+	 * Annotate this field with the given annotation
+	 * @param annotation		The annotation to add to the field
+	 * @return		This parameter for method chaining
+	 */
 	public ParameterImpl annotate(IAnnotation annotation) {
 		if (annotations == null)
 			annotations = new TreeSet<IAnnotation>();

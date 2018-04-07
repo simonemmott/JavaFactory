@@ -14,6 +14,19 @@ import com.k2.Util.classes.Dependency;
 import com.k2.Wiget.AssembledWiget;
 import com.k2.Wiget.Wiget;
 
+/**
+ * The compilation unit wiget writes the package and imports clauses of a compilation unit before writing the wigets added to 
+ * the compilation unit body.
+ * 
+ * Only one wiget should be added to the compilation unit body
+ * 
+ * The output is initially generated on a PrintWriter generated from a StringWriter. This allows the wigets to be output and their 
+ * dependencies recorded on the wiget assembly. The dependnecies are then output on the output print writer before the generated output
+ * on the String print writer is appended to the output print writer.
+ * 
+ * @author simon
+ *
+ */
 @WigetImplementation
 public class CompilationUnitWigetImpl extends AJavaWiget<IType> implements CompilationUnitWiget{
 	
@@ -34,6 +47,7 @@ public class CompilationUnitWigetImpl extends AJavaWiget<IType> implements Compi
 		out.println();
 		
 		StringWriter sw = new StringWriter();
+		@SuppressWarnings("unused")
 		PrintWriter pw = a.outputContents(CompilationUnitWiget.model.body, new PrintWriter(sw));
 		
 		@SuppressWarnings("unchecked")

@@ -1,20 +1,23 @@
 package com.k2.JavaFactory.type.wigetModel;
 
-import java.util.List;
 import java.util.Set;
 
-import com.k2.JavaFactory.type.IAnnotation;
-import com.k2.JavaFactory.type.IParameter;
-import com.k2.JavaFactory.type.IType;
-import com.k2.JavaFactory.type.Visibility;
+import com.k2.JavaFactory.type.IClass;
 import com.k2.Util.classes.Dependency;
 import com.k2.Wiget.Wiget;
 import com.k2.Wiget.WigetParameter;
 
+/**
+ * Static Wiget Models mirror the getter methods of the required types of wigets as such the meaning of the fields should be inferred from the Type of the same name
+ * 
+ * @author simon
+ *
+ * @param <W>	The wiget that this static wiget model will supply values to.
+ */
 @SuppressWarnings("rawtypes")
 public class IMethod_<W extends Wiget> extends IMethodSignature_ {
 
-	public WigetParameter<W, IType> declaringType;
+	public WigetParameter<W, IClass> declaringClass;
 	public WigetParameter<W, String> methodBody;
 	public WigetParameter<W, Set<Dependency>> dependencies;
 	public WigetParameter<W, String> fullName;

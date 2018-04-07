@@ -9,28 +9,44 @@ import com.k2.JavaFactory.type.IField;
 import com.k2.JavaFactory.type.IType;
 import com.k2.JavaFactory.type.Visibility;
 import com.k2.Util.StringUtil;
-import com.k2.Util.classes.ClassUtil;
-import com.k2.Util.classes.Dependencies;
-import com.k2.Util.classes.Dependency;
 
+/**
+ * A basic implementation of the IField interface
+ * 
+ * @author simon
+ *
+ */
 public class FieldImpl implements IField {
 	
-	public FieldImpl(IClass declaringType, Visibility visibility, IType javaType, String name) { 
-		this.declaringType = declaringType; 
+	/**
+	 * Create a field on the declaringClass with the given visibility, type and name
+	 * @param declaringClass		The class declaring the new field
+	 * @param visibility			The visibility of the new field
+	 * @param javaType		The java type of the new field
+	 * @param name		The name of the field
+	 */
+	public FieldImpl(IClass declaringClass, Visibility visibility, IType javaType, String name) { 
+		this.declaringClass = declaringClass; 
 		this.visibility = visibility; 
 		this.javaType = javaType; 
 		this.name = name; 
 	}
 	
-	public FieldImpl(IClass declaringType, IType javaType, String name) { 
-		this.declaringType = declaringType; 
+	/**
+	 * Create a private field on the declaring class with the given type and name
+	 * @param declaringClass		The class declaring the field
+	 * @param javaType			The java type of the new field
+	 * @param name				The name of the new field
+	 */
+	public FieldImpl(IClass declaringClass, IType javaType, String name) { 
+		this.declaringClass = declaringClass; 
 		this.visibility = Visibility.PRIVATE; 
 		this.javaType = javaType; 
 		this.name = name; 
 	}
 	
-	protected final IClass declaringType;
-	@Override public IType getDeclaringType() { return declaringType; }
+	protected final IClass declaringClass;
+	@Override public IClass getDeclaringClass() { return declaringClass; }
 	protected final Visibility visibility;
 	@Override public Visibility getVisibility() { return visibility; }
 	protected final IType javaType;
@@ -41,6 +57,11 @@ public class FieldImpl implements IField {
 	private String title;
 	@Override
 	public String getTitle() { return title; }
+	/**
+	 * Set the title of the field
+	 * @param title	The new title for the field
+	 * @return	This field for method chaining
+	 */
 	public FieldImpl setTitle(String title) {
 		this.title = title;
 		return this;
@@ -49,6 +70,11 @@ public class FieldImpl implements IField {
 	private String description;
 	@Override
 	public String getDescription() { return description; }
+	/**
+	 * Set the description of the field
+	 * @param description	The new description for the field
+	 * @return	This field for method chaining
+	 */
 	public FieldImpl setDescription(String description) {
 		this.description = description;
 		return this;
@@ -57,22 +83,37 @@ public class FieldImpl implements IField {
 	private Boolean includeJavaDoc;
 	@Override
 	public boolean getIncludeJavaDoc() { return (includeJavaDoc==null) ? (StringUtil.isSet(title) || StringUtil.isSet(description)) : includeJavaDoc; }
+	/**
+	 * Define whether to include the javadoc for the field. If the title or description is set the default is to include the javadoc
+	 * @param includeJavaDoc		True if the javadoc should be included in the generated source code
+	 * @return	This field for method chaining
+	 */
 	public FieldImpl setIncludeJavaDoc(Boolean includeJavaDoc) {
 		this.includeJavaDoc = includeJavaDoc;
 		return this;
 	}
 	
-	private Boolean includeGetter;
+	private Boolean includeGetter = true;
 	@Override
 	public boolean getIncludeGetter() { return (includeGetter==null) ? true: includeGetter; }
+	/**
+	 * Set whether or not to include a getter method with this field. defaults to true
+	 * @param includeGetter	True if a getter should be included with the field
+	 * @return		This field for method chaining
+	 */
 	public FieldImpl setIncludeGetter(Boolean includeGetter) {
 		this.includeGetter = includeGetter;
 		return this;
 	}
 	
-	private Boolean includeSetter;
+	private Boolean includeSetter = true;
 	@Override
 	public boolean getIncludeSetter() { return (includeSetter==null) ? true : includeSetter; }
+	/**
+	 * Set whether or not to include a setter. defaults to true
+	 * @param includeSetter		True if a setter should be included with the field
+	 * @return		This field for method chaining
+	 */
 	public FieldImpl setIncludeSetter(Boolean includeSetter) {
 		this.includeSetter = includeSetter;
 		return this;
@@ -81,6 +122,11 @@ public class FieldImpl implements IField {
 	protected Set<IAnnotation> annotations;
 	@Override
 	public Set<IAnnotation> getAnnotations() { return annotations; }
+	/**
+	 * Annotate this field with the given annotation
+	 * @param annotation		The annotation to add to the field
+	 * @return		This field for method chaining
+	 */
 	public FieldImpl annotate(IAnnotation annotation) {
 		if (annotations == null)
 			annotations = new TreeSet<IAnnotation>();
@@ -91,6 +137,11 @@ public class FieldImpl implements IField {
 	protected Object unwrap;
 	@Override
 	public Object getUnwrap() { return (unwrap==null) ? this : unwrap; }
+	/**
+	 * Wrap the given object to be returned as the unwrap parameter in the wiget
+	 * @param wrap	The object to wrap
+	 * @return	This enumerated value for method chaining
+	 */
 	public FieldImpl wrap(Object wrap) { this.unwrap = wrap; return this; }
 
 
@@ -124,7 +175,7 @@ public class FieldImpl implements IField {
 
 	@SuppressWarnings("unchecked")
 	public <C extends IClass> C up(Class<C> cls) {
-		return (C)declaringType;
+		return (C)declaringClass;
 	}
 
 	

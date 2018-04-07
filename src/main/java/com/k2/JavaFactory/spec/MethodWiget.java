@@ -13,6 +13,11 @@ import com.k2.JavaFactory.type.wigetModel.IMethod_;
 import com.k2.Wiget.WigetContainer;
 import com.k2.Wiget.WigetParameter;
 
+/**
+ * Write the java source for a method in a class
+ * @author simon
+ *
+ */
 @WigetSpecification
 public interface MethodWiget extends JavaWiget<IMethod> {
 	
