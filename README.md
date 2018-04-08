@@ -1,4 +1,4 @@
-# JavaFactory
+# JavaFactory v0.1.0
 The `JavaFactory` provides an API for the generation of java source code for classes, interfaces and enumerations.
 
 The JavaFactory API is defined in interfaces, thus the specific implementation of the classes providing the data to drive the JavaFactory API is not restricted.  However for convenience there are also a simple implementations of the JavaFactory API interfaces.
