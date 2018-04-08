@@ -21,7 +21,7 @@
     <dependency>
       <groupId>com.k2</groupId>
       <artifactId>Util</artifactId>
-      <version>0.2.13-SNAPSHOT</version>
+      <version>0.2.13</version>
     </dependency>
 	<dependency>
 	    <groupId>ch.qos.logback</groupId>
@@ -42,7 +42,7 @@
     <dependency>
     	<groupId>com.k2</groupId>
     	<artifactId>Wiget</artifactId>
-    	<version>0.1.1-SNAPSHOT</version>
+    	<version>0.1.1</version>
     </dependency>
   </dependencies>
   <build>
