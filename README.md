@@ -107,6 +107,21 @@ Maven users can add this project using the following additions to the pom.xml fi
 
 ## Working With JavaFactory
 
+The java factory can be used to produce compilation units for Classes, Enumeration and Interfaces.
+In each case the method to generate the source code follows the example above but with the following changes
+
+| Required Output | Input Data Type                      | Output Wiget                             |
+|-----------------|--------------------------------------|------------------------------------------|
+| Class           | `com.k2.JavaFactory.type.IClass`     | `com.k2.JavaFactory.spec.ClassWiget`     |
+| Interface       | `com.k2.JavaFactory.type.IInterface` | `com.k2.JavaFactory.spec.InterfaceWiget` |
+| Enumeration     | `com.k2.JavaFactory.type.IEnum`      | `com.k2.JavaFactory.spec.EnumWiget`      |
+
+Annotations can be added to the resultant java source code by calling the `annotate(...)` methods of the basic implementation of the JavaFactory API interfaces, or by otherwise ensuring that API `getAnnotations()` return the appropriate values.
+
+Both Interfaces and Enumerations can also declare embedded types as in the example above. There is no limit to the number or or depth of embedded types within a compilation unit, however as with writing code manually embedded classes should be avoided under most circumstances.
+
+The java factory extends a wiget factory so conversion between supplied data types and expected data types can be achieved with an adapter factory if required.
+
 
 
 

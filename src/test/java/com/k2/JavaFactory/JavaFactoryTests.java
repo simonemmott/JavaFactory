@@ -545,15 +545,13 @@ public class JavaFactoryTests {
 				"@OtherEnumAnnotation(name = \"iAnnotation\")\n" + 
 				"public enum MyEnum implements AnotherEnum, IMyEnum {\n" + 
 				"\n" + 
-				"\n" + 
 				"	/*************************************************************************\n" + 
 				"	 * <strong>Value One</stong>\n" + 
 				"	 * This is the first enumeration value\n" + 
 				"	 */\n" + 
 				"	@MetaSubTypeValue(title = \"Value One - Annotated\", \n" + 
 				"		description = \"This is the first enumeration value - Annotated\")\n" + 
-				"	ONE;\n" + 
-				"\n" + 
+				"	ONE,\n" + 
 				"	@MetaSubTypeValue(title = \"Value Two - Annotated\", \n" + 
 				"		description = \"This is the second enumeration value - Annotated\")\n" + 
 				"	TWO;\n" + 
@@ -707,15 +705,13 @@ public class JavaFactoryTests {
 				"	@OtherEnumAnnotation(name = \"iAnnotation\")\n" + 
 				"	public enum MyEnum implements IMyEnum {\n" + 
 				"\n" + 
-				"\n" + 
 				"		/*************************************************************************\n" + 
 				"		 * <strong>Value One</stong>\n" + 
 				"		 * This is the first enumeration value\n" + 
 				"		 */\n" + 
 				"		@MetaSubTypeValue(title = \"Value One - Annotated\", \n" + 
 				"			description = \"This is the first enumeration value - Annotated\")\n" + 
-				"		ONE;\n" + 
-				"\n" + 
+				"		ONE,\n" + 
 				"		@MetaSubTypeValue(title = \"Value Two - Annotated\", \n" + 
 				"			description = \"This is the second enumeration value - Annotated\")\n" + 
 				"		TWO;\n" + 
@@ -727,15 +723,13 @@ public class JavaFactoryTests {
 				"	@OtherEnumAnnotation(name = \"iAnnotation\")\n" + 
 				"	public enum MyOtherEnum implements AnotherEnum {\n" + 
 				"\n" + 
-				"\n" + 
 				"		/*************************************************************************\n" + 
 				"		 * <strong>Value One</stong>\n" + 
 				"		 * This is the first enumeration value\n" + 
 				"		 */\n" + 
 				"		@MetaSubTypeValue(title = \"Value One - Annotated\", \n" + 
 				"			description = \"This is the first enumeration value - Annotated\")\n" + 
-				"		AAA;\n" + 
-				"\n" + 
+				"		AAA,\n" + 
 				"		@MetaSubTypeValue(title = \"Value Two - Annotated\", \n" + 
 				"			description = \"This is the second enumeration value - Annotated\")\n" + 
 				"		BBB;\n" + 
@@ -811,8 +805,42 @@ public class JavaFactoryTests {
 		
 		cu.output(iClass, new PrintWriter(sw)).flush();
 		
-		System.out.println(sw.toString());
+//		System.out.println(sw.toString());
 
+		String expected = "package my.test;\n" + 
+				"\n" + 
+				"\n" + 
+				"import my.test.interfaces.IMyClass;\n" + 
+				"\n" + 
+				"/*************************************************************************\n" + 
+				" * <strong>My Class</stong>\n" + 
+				" * This is my class\n" + 
+				" */\n" + 
+				"public class MyClass extends myType implements IMyClass {\n" + 
+				"\n" + 
+				"	enum MyEnum {\n" + 
+				"\n" + 
+				"		ONE,\n" + 
+				"		TWO;\n" + 
+				"	}\n" + 
+				"\n" + 
+				"	private long id;\n" + 
+				"	public long getId() { return id: }\n" + 
+				"	public MyClass setId( long id ) { this.id = id: return this; }\n" + 
+				"\n" + 
+				"	private String name;\n" + 
+				"	public String getName() { return name: }\n" + 
+				"	public MyClass setName( String name ) { this.name = name: return this; }\n" + 
+				"\n" + 
+				"	private void doIt(int count) {\n" + 
+				"		for (int do = 0; do<count: do++) {\n" + 
+				"			System.out.println(\"Do: \"+do);\n" + 
+				"		}\n" + 
+				"	}\n" + 
+				"}\n";
+		
+		assertEquals(expected, sw.toString());
+		
 	}
 
 
