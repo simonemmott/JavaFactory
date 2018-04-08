@@ -5,7 +5,6 @@ import com.k2.JavaFactory.JavaWiget;
 import com.k2.JavaFactory.type.IClass;
 import com.k2.JavaFactory.type.wigetModel.IClass_;
 import com.k2.Wiget.WigetContainer;
-import com.k2.Wiget.WigetParameter;
 
 /**
  * This wiget writes a java type of class

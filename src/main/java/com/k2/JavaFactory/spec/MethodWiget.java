@@ -2,16 +2,9 @@ package com.k2.JavaFactory.spec;
 
 import com.k2.Wiget.annotation.WigetSpecification;
 import com.k2.JavaFactory.JavaWiget;
-import com.k2.JavaFactory.type.IClass;
-import com.k2.JavaFactory.type.IInterface;
 import com.k2.JavaFactory.type.IMethod;
-import com.k2.JavaFactory.type.IMethodSignature;
-import com.k2.JavaFactory.type.wigetModel.IClass_;
-import com.k2.JavaFactory.type.wigetModel.IInterface_;
-import com.k2.JavaFactory.type.wigetModel.IMethodSignature_;
 import com.k2.JavaFactory.type.wigetModel.IMethod_;
 import com.k2.Wiget.WigetContainer;
-import com.k2.Wiget.WigetParameter;
 
 /**
  * Write the java source for a method in a class
