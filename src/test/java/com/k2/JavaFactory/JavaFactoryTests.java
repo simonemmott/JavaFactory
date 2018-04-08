@@ -776,6 +776,44 @@ public class JavaFactoryTests {
 		assertEquals(expected, sw.toString());
 		
 	}
+	
+	@Test
+	public void simpleExample() {
+		
+		JavaFactory factory = new JavaFactory("com.k2.JavaFactory.impl");
+
+		IClass iClass = new ClassImpl("my.test.MyClass")
+			.setTitle("My Class")
+			.setDescription("This is my class")
+			.extendsClass(new ClassImpl("my.test.myType"))
+			.implementsInterface("my.test.interfaces.IMyClass")
+			.visibility(Visibility.PUBLIC)
+			.declares(
+				new EnumImpl("my.test.MyEnum")
+					.defineValue("ONE").up(EnumImpl.class)
+					.defineValue("TWO").up(EnumImpl.class)
+				, ClassImpl.class)
+			.defineField(tLong, "id").up(ClassImpl.class)
+			.defineField(tString, "name").up(ClassImpl.class)
+			.defineMethod(Visibility.PRIVATE, "doIt")
+				.define(tInt, "count").up(MethodImpl.class)
+				.setMethodBody(
+					"for (int do = 0; do<count: do++) {\n"+
+						"	System.out.println(\"Do: \"+do);\n"+
+						"}"
+				).up(ClassImpl.class);
+				
+		JavaAssembly<CompilationUnitWiget, EnumImpl> cu = factory.getAssembly(CompilationUnitWiget.class);
+		cu.root()
+			.add(CompilationUnitWiget.model.body, ClassWiget.class);
+		
+		StringWriter sw = new StringWriter();
+		
+		cu.output(iClass, new PrintWriter(sw)).flush();
+		
+		System.out.println(sw.toString());
+
+	}
 
 
 }

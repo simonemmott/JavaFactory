@@ -108,8 +108,15 @@ public class EnumWigetImpl extends AJavaWiget<IEnum> implements EnumWiget{
 				}
 		
 		// Write the enum values
-		for (IEnumValue value : a.get(EnumWiget.model.values))
+		Iterator<IEnumValue> i = a.get(EnumWiget.model.values).iterator();
+		while (i.hasNext()) {
+			IEnumValue value = i.next();
 			out = valueWiget.output(value, out);
+			if (i.hasNext())
+				out.println(",");
+			else 
+				out.println(";");
+		}
 		
 		// Write the wigets that have been included in this wigets body container
 		out = a.outputContents(EnumWiget.model.body, out);		

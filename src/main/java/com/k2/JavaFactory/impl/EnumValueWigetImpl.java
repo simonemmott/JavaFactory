@@ -32,8 +32,6 @@ public class EnumValueWigetImpl extends AJavaWiget<IEnumValue> implements EnumVa
 		
 		JavaAssembly ja = (JavaAssembly)a.assembly();	
 		
-		out.println();
-
 		// Write the field java doc for the enum value 
 		if (a.get(EnumValueWiget.model.includeJavaDoc)) {
 			out = outputFieldJavaDoc(ja, out, 
@@ -53,7 +51,7 @@ public class EnumValueWigetImpl extends AJavaWiget<IEnumValue> implements EnumVa
 		}
 		
 		// Write the enum value name
-		out.println(ja.getIndent()+a.get(EnumValueWiget.model.name)+";");
+		out.print(ja.getIndent()+a.get(EnumValueWiget.model.name));
 		
 		return out;
 	}
