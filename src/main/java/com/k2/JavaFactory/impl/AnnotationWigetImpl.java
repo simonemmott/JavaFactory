@@ -17,6 +17,7 @@ import com.k2.JavaFactory.JavaFamily;
 import com.k2.JavaFactory.spec.AnnotationWiget;
 import com.k2.JavaFactory.type.IAnnotation;
 import com.k2.JavaFactory.type.IParameterValue;
+import com.k2.JavaFactory.type.IType;
 import com.k2.Util.ObjectUtil;
 import com.k2.Util.java.JavaUtil;
 import com.k2.Wiget.AssembledWiget;
@@ -268,6 +269,10 @@ public class AnnotationWigetImpl extends AJavaWiget<IAnnotation> implements Anno
 			Enum<?> enumValue = (Enum<?>)value;
 			ja.addDependencyFor(enumValue.getDeclaringClass());
 			out.print(ja.getIndent(inline)+enumValue.getDeclaringClass().getSimpleName()+"."+enumValue.name());
+		} else if (value instanceof IType) {
+			IType type = (IType)value;
+			ja.addDependencyFor(type.getName());
+			out.print(ja.getIndent(inline)+type.getBasename()+".class");
 		}
 	}
 
